@@ -7,5 +7,7 @@ target 'VideoEditor' do
   # Pods for VideoEditor
 
   pod 'SnapKit'
+  pod 'HXPHPicker'
+  pod 'GDPerformanceView-Swift'
 
 end
