@@ -12,42 +12,44 @@ extension WelcomePageVC: EditorViewControllerDelegate {
     
     func editorViewController(_ editorViewController: EditorViewController, didFinish asset: EditorAsset) {
         
-        if asset.result == nil {
-            self.view.hx.showWarning(text: "Can't detect changes", delayHide: 1.5, animated: true)
-            return
-        }
-        
-        switch asset.type {
-        case .image(let image):
-            let localImageAsset = LocalImageAsset.init(image: image)
-            let photoAsset = PhotoAsset.init(localImageAsset: localImageAsset)
-            photoAsset.editedResult = asset.result
-            
-            AssetManager.saveSystemAlbum(type: .image(photoAsset.editedResult!.image!), customAlbumName: "VideoEditorApp") {
-                self.view.hx.hide(animated: true)
-                if $0 != nil {
-                    self.view.hx.showSuccess(text: "Save in Album", delayHide: 1.5, animated: true)
-                } else {
-                    self.view.hx.showWarning(text: "Unable to save", delayHide: 1.5, animated: true)
-                }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            if asset.result == nil {
+                self.view.hx.showWarning(text: "Can't detect changes", delayHide: 1.5, animated: true)
+                return
             }
             
-        case .video(let url):
-            let localImageAsset = LocalVideoAsset.init(videoURL: url)
-            let videoAsset = PhotoAsset.init(localVideoAsset: localImageAsset)
-            videoAsset.editedResult = asset.result
-            
-            AssetManager.saveSystemAlbum(type: .videoURL(videoAsset.videoEditedResult!.url), customAlbumName: "VideoEditorApp") {
-                self.view.hx.hide(animated: true)
-                if $0 != nil {
-                    self.view.hx.showSuccess(text: "Save in Album", delayHide: 1.5, animated: true)
-                } else {
-                    self.view.hx.showWarning(text: "Unable to save", delayHide: 1.5, animated: true)
+            switch asset.type {
+            case .image(let image):
+                let localImageAsset = LocalImageAsset.init(image: image)
+                let photoAsset = PhotoAsset.init(localImageAsset: localImageAsset)
+                photoAsset.editedResult = asset.result
+                
+                AssetManager.saveSystemAlbum(type: .image(photoAsset.editedResult!.image!), customAlbumName: "VideoEditorApp") {
+                    self.view.hx.hide(animated: true)
+                    if $0 != nil {
+                        self.view.hx.showSuccess(text: "Save in Album", delayHide: 1.5, animated: true)
+                    } else {
+                        self.view.hx.showWarning(text: "Unable to save", delayHide: 1.5, animated: true)
+                    }
                 }
+                
+            case .video(let url):
+                let localImageAsset = LocalVideoAsset.init(videoURL: url)
+                let videoAsset = PhotoAsset.init(localVideoAsset: localImageAsset)
+                videoAsset.editedResult = asset.result
+                
+                AssetManager.saveSystemAlbum(type: .videoURL(videoAsset.videoEditedResult!.url), customAlbumName: "VideoEditorApp") {
+                    self.view.hx.hide(animated: true)
+                    if $0 != nil {
+                        self.view.hx.showSuccess(text: "Save in Album", delayHide: 1.5, animated: true)
+                    } else {
+                        self.view.hx.showWarning(text: "Unable to save", delayHide: 1.5, animated: true)
+                    }
+                }
+                
+            default: break
+                
             }
-            
-        default: break
-            
         }
     }
     
