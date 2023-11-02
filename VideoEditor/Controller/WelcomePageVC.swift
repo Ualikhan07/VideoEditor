@@ -37,6 +37,7 @@ class WelcomePageVC: UIViewController {
         label.font = .systemFont(ofSize: 20, weight: .regular)
         label.numberOfLines = 0
         label.textAlignment = .left
+        label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
